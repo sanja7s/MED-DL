@@ -1,7 +1,7 @@
 # sanja7s:
 
-/MED-DL/resources/*
-
+MED-DL/resources/*
+.DS_Store
 
 
 # Byte-compiled / optimized / DLL files
