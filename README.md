@@ -3,7 +3,7 @@
 
 ## Structure
 
-`MED-DL` contains the library for extraction. In it,`resources` needs the pretrained models, which can be downloaded from [FigShare models](https://doi.org/10.6084/m9.figshare.12039933.v1). Download the 3 folders with pretrained models and place them all onder `resources/model`. 
+`MED-DL` contains the library for extraction. Inside this folder,`resources` requires the pretrained models, which can be downloaded from [FigShare models](https://doi.org/10.6084/m9.figshare.12039933.v1). Download the 3 folders with pretrained models and place them all under `resources/model`. 
 
 `data` contains a sample dataset, and `results` contains a sample extractor output on the given dataset.
 
