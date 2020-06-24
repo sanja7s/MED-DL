@@ -22,5 +22,5 @@
 ** for the models to work, for the [flair](https://github.com/flairNLP/flair) library, you also need to download the [RoBERTa embeddings](https://github.com/flairNLP/flair/blob/master/resources/docs/TUTORIAL_4_ELMO_BERT_FLAIR_EMBEDDING.md).
 
 
-### If you se this repostiory, please consider citing out paper
+### If you use this repostiory, please consider citing our paper
 [Extracting Medical Entities from Social Media](https://dl.acm.org/doi/abs/10.1145/3368555.3384467)
