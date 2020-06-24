@@ -14,7 +14,7 @@
 
 ## Requirements
 
-* flair*
+* flair**
 * pandas
 * tqdm
 * typing
