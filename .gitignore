@@ -2,6 +2,8 @@
 
 MED-DL/resources/*
 .DS_Store
+# exception to the rule
+!MED-DL/resources/.gitkeep 
 
 
 # Byte-compiled / optimized / DLL files
