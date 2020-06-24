@@ -14,12 +14,12 @@
 
 ## Requirements
 
--- flair*
--- pandas
--- tqdm
--- typing
+* flair*
+* pandas
+* tqdm
+* typing
 
-* for the models to work, for the [flair](https://github.com/flairNLP/flair) library, you also need to download the [RoBERTa embeddings](https://github.com/flairNLP/flair/blob/master/resources/docs/TUTORIAL_4_ELMO_BERT_FLAIR_EMBEDDING.md).
+** for the models to work, for the [flair](https://github.com/flairNLP/flair) library, you also need to download the [RoBERTa embeddings](https://github.com/flairNLP/flair/blob/master/resources/docs/TUTORIAL_4_ELMO_BERT_FLAIR_EMBEDDING.md).
 
 
 ### If you se this repostiory, please consider citing out paper
