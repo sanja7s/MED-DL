@@ -1,9 +1,9 @@
 # sanja7s:
 
-MED-DL/resources/*
+MEDDL/resources/*
 .DS_Store
 # exception to the rule
-!MED-DL/resources/.gitkeep 
+!MEDDL/resources/.gitkeep 
 
 
 # Byte-compiled / optimized / DLL files
