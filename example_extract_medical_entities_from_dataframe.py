@@ -1,7 +1,7 @@
 
 """
 	sanja7s
-	MED-DL: code to run Medical Entity Extraction
+	MEDDL: code to run Medical Entity Extraction
 
 	given an input dataframe "data" with 
 	a text column "column_name", and
@@ -15,7 +15,7 @@
 
 import sys, os
 import pandas as pd
-sys.path.append('MED-DL/')
+sys.path.append('MEDDL/')
 import predict_flair as spf
 
 script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -38,7 +38,7 @@ out_dir = 'results/'
 in_dir = os.path.join(script_directory, in_dir)
 out_dir = os.path.join(script_directory, out_dir)
 
-file_name = "example_telefonica_glassdoor.csv"
+file_name = "example_input.csv"
 
 def predict_file(f_in, f_out):
 
