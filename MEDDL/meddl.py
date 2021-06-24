@@ -170,18 +170,18 @@ class MedDLEntityExtractor:
 		"""
 
 		res = df[text_field].apply(lambda x: self.extract(x))
-		print (res)
+		# print (res)
 		try:
 			# this is for syms 
 			df['sym'] = [x['sym'] if x != {} else None for x in res.values ]
 		except Exception as e:
-			print (e)
+			# print (e)
 			df['sym'] = None
 		try:
 			# this is for drugs
 			df['drug'] = [x['drug'] if x != {} else None for x in res.values ]
 		except Exception as e:
-			print (e)
+			# print (e)
 			df['drug'] = None		
 		return df
 		

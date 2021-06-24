@@ -9,9 +9,7 @@
 
 
 
-`example_extract_medical_entities_from_post.py` shows how to run the extraction on a sample post (textual input).
-
-`example_extract_medical_entities_from_dataframe.py` shows how to run the extraction on a sample dataframe.
+`example_extract_medical_entities.py` shows how to run the extraction on a sample post (textual input) or on a sample dataframe with a text column.
 
 
 

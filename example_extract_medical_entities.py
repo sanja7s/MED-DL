@@ -2,14 +2,12 @@
 	sanja7s
 	MED-DL: code to run Medical Entity Extraction
 
-	given an input dataframe "data" with 
-	a text column "column_name", and
-	an index column "index_name",
-	invoke the script for prediction spf.predict
+	given an input post or dataframe "data" with 
+	a text column, extract medical entities.
 
 	depending on the data type, you will select a different model
 	e.g., for Twitter, select Micromed, and for Reddit, select AMT
-	other parameters in the model are set to best, do not change them
+	other parameters in the model are set to the best, do not change them
 """
 import pandas as pd
 import sys, os, csv
@@ -22,6 +20,10 @@ possibilities are:
 """
 
 def predict_file(f_in, text_column, sep, f_out, drop_empty=True):
+	"""
+		customise this function as needed
+		for your data
+	"""
 
 	print ("predicting", f_in)
 	data = pd.read_csv(f_in, sep=sep, nrows=1000)
@@ -39,7 +41,7 @@ def predict_file(f_in, text_column, sep, f_out, drop_empty=True):
 			res_df.to_csv(f_out, encoding='utf-8', index=False,\
 				sep=sep)
 
-### from post
+### initialize
 model_name = 'AMT' 
 extractor = meddl.MedDLEntityExtractor(model_name)
 
@@ -50,10 +52,8 @@ print (res)
 
 ### from dataframe
 file_name = "example_data_reddit.csv"
-
 in_dir ='data/'
 out_dir = 'results/'
 f_in = os.path.join(in_dir, file_name)
 f_out = os.path.join(out_dir, file_name)
-
 predict_file(f_in, 'text', '|', f_out)
