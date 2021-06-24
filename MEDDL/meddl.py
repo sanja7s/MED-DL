@@ -34,7 +34,7 @@ package_directory = os.path.dirname(os.path.abspath(__file__))
 
 
 class MedDLEntityExtractor:
-	def __init__(self):
+	def __init__(self, model_name):
 		"""
 		possibilities are:
 		-- Micromed (Twitter)
@@ -42,8 +42,27 @@ class MedDLEntityExtractor:
 		-- CADEC (CADEC)
 		"""
 
+		if model_name == 'AMT':
+			self.SEQUENCE_LIMIT = 200
+		elif model_name == 'CADEC':
+			self.SEQUENCE_LIMIT = 300
+		else:
+			self.SEQUENCE_LIMIT = 150
+
 		self.selected_embeddings = {'glove':1, 'char':0, 'flair':0, 'pooled-flair':0, \
 								'bert':0, 'twitter':0, 'elmo':0, 'roberta':1}
+
+		self.selected_embeddings_text = [key  for key in self.selected_embeddings if self.selected_embeddings[key]]
+		self.selected_embeddings_text = '_'.join(self.selected_embeddings_text)
+		print (self.selected_embeddings_text)
+
+		# print (package_directory)
+		self.model_dir = 'resources/model/FA_' + model_name + self.selected_embeddings_text 
+		self.model_path = os.path.join(package_directory, self.model_dir, 'final-model.pt')
+		print (self.model_path)
+
+		# load the model you trained
+		self.model = SequenceTagger.load(self.model_path)
 
 
 	# for other social media text
@@ -62,49 +81,19 @@ class MedDLEntityExtractor:
 		return (" ".join(pieces[i:i+n]) for i in range(0, len(pieces), n))
 
 
-	def extract(self, model_name, text):
-
+	def extract(self, text):
 		"""		
-			input: model string -- AMT, Micromed, or CADEC
-				   selected_embeddings dict -- {'glove':1, 'char':0, ...}
-				   data dataframe -- with whatever columns, and the text to parse
-				   column_name string -- the name of the text column
-				   index_name string -- the name of the index column to be saved
-				   output_file string -- where to save the output
+			input: model_name string -- AMT, Micromed, or CADEC
+				   text -- to process
 			output:
-					will create 3 files:
-					two .csc files with index, and one additional columns: for drugs or diseases
-					one .json file with index and both diseses and drugs
-
-			NOTE: this function has a hard-coded address to model dir
-				  that could be improved for other setups but here we have only that one so ok
+					dictionary -- {'sym': [list of symptoms],
+								   'drug': [list of drugs]}
+								example: {'sym': 'alopecia; ',\
+										  'drug': 'Acitretin; '}
 		"""
 
 		parsed = 0
 		skipped = 0
-
-		if model_name == 'AMT':
-			SEQUENCE_LIMIT = 200
-		elif model_name == 'CADEC':
-			SEQUENCE_LIMIT = 300
-		else:
-			SEQUENCE_LIMIT = 150
-
-
-		selected_embeddings_text = [key  for key in self.selected_embeddings if self.selected_embeddings[key]]
-		selected_embeddings_text = '_'.join(selected_embeddings_text)
-		print (selected_embeddings_text)
-
-
-		print (package_directory)
-		model_dir = 'resources/model/FA_' + model_name + selected_embeddings_text 
-		model_path = os.path.join(package_directory, model_dir, 'final-model.pt')
-		# model_path = package_directory + model_dir + '/final-model.pt'
-		
-		print (model_path)
-		# load the model you trained
-		model = SequenceTagger.load(model_path)
-
 
 		body = str(text)
 
@@ -114,7 +103,7 @@ class MedDLEntityExtractor:
 
 		body = self.get_clean_body(body)
 
-		bodies = self.splitter(SEQUENCE_LIMIT, body)
+		bodies = self.splitter(self.SEQUENCE_LIMIT, body)
 
 		dis_res = ''
 		drug_res = ''
@@ -126,7 +115,7 @@ class MedDLEntityExtractor:
 
 			try:
 				# # predict tags and print
-				model.predict(sentence)
+				self.model.predict(sentence)
 
 				res = sentence.to_dict(tag_type='ner')
 				# print (res['entities'])
@@ -139,12 +128,12 @@ class MedDLEntityExtractor:
 					if 'DIS' in labels:
 						conf = labels.replace("[","").replace("]", "").replace("(","").replace(")","").replace("DIS","").replace("DRUG","")
 						dis_res = el['text'].replace('\n', ' ')+ '; ' + dis_res
-						print (dis_res)
+						# print (dis_res)
 
 					elif 'DRUG' in labels:
 						conf = labels.replace("[","").replace("]", "").replace("(","").replace(")","").replace("DIS","").replace("DRUG","")
 						drug_res = el['text'].replace('\n', ' ') + '; ' +  drug_res 
-						print (drug_res)
+						# print (drug_res)
 					parsed += 1
 
 			except Exception as e:
@@ -162,10 +151,38 @@ class MedDLEntityExtractor:
 			res_dict['sym'] = dis_res
 			res_dict['drug'] = drug_res
 
-
 		return res_dict
 
 
+	def extract_dataframe(self, df, text_field):
+		"""		
+			input: 
+				   df dataframe -- with whatever columns, and the text to parse
+				   text_field -- the name of the text column
+				   df_outfile -- where to save the output
+			output:
+					will create 3 files:
+					two .csc files with index, and one additional columns: for drugs or diseases
+					one .json file with index and both diseses and drugs
 
+			NOTE: this function has a hard-coded address to model dir
+				  that could be improved for other setups but here we have only that one so ok
+		"""
 
+		res = df[text_field].apply(lambda x: self.extract(x))
+		print (res)
+		try:
+			# this is for syms 
+			df['sym'] = [x['sym'] if x != {} else None for x in res.values ]
+		except Exception as e:
+			print (e)
+			df['sym'] = None
+		try:
+			# this is for drugs
+			df['drug'] = [x['drug'] if x != {} else None for x in res.values ]
+		except Exception as e:
+			print (e)
+			df['drug'] = None		
+		return df
+		
 	

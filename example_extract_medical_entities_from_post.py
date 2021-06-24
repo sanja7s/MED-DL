@@ -23,8 +23,8 @@ possibilities are:
 """
 
 model_name = 'AMT' 
-extractor = meddl.MedDLEntityExtractor()
+extractor = meddl.MedDLEntityExtractor(model_name)
 
 text = 'Acitretin caused me alopecia.'
-res = extractor.extract(model_name, text)
+res = extractor.extract(text)
 print (res)

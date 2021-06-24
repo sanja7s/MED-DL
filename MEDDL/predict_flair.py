@@ -59,7 +59,7 @@ def predict(model_name, selected_embeddings, data, column_name, index_name, outp
 			   output_file string -- where to save the output
 		output:
 				will create 3 files:
-				two .csc files with index, and one additional columns: for drugs or diseases
+				two .csv files with index, and one additional columns: for drugs or diseases
 				one .json file with index and both diseses and drugs
 
 		NOTE: this function has a hard-coded address to model dir
